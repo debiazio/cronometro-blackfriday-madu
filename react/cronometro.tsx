@@ -2,17 +2,17 @@ import React, { useEffect, useState } from 'react'
 import styles from './styles.css'
 
 interface CountdownProps {
-  /** Data final como string (ex: "2025-11-10T00:00:00") */
   endDate?: string
-  /** Classe do VTEX para personalização */
   blockClass?: string
 }
 
 const Countdown: React.FC<CountdownProps> = ({
   endDate = "2025-11-10T00:00:00",
+  // endDate = "2025-11-06T15:48:00",
   blockClass
 }) => {
   const [time, setTime] = useState({ hours: "00", minutes: "00" })
+  const [expired, setExpired] = useState(false)
 
   useEffect(() => {
     const target = new Date(endDate).getTime()
@@ -22,7 +22,7 @@ const Countdown: React.FC<CountdownProps> = ({
       const diff = target - now
 
       if (diff <= 0) {
-        setTime({ hours: "00", minutes: "00" })
+        setExpired(true)
         return
       }
 
@@ -39,6 +39,8 @@ const Countdown: React.FC<CountdownProps> = ({
     const interval = setInterval(tick, 1000)
     return () => clearInterval(interval)
   }, [endDate])
+
+  if (expired) return null  // <-- some da tela
 
   return (
     <div className={`${styles.countdownContainer} ${blockClass ?? ''}`}>
