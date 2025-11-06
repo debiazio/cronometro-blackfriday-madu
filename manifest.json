@@ -1,7 +1,7 @@
 {
   "vendor": "madumfm2",
   "name": "cronometro",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "title": "cronometro",
   "description": "App para mostrar um contador regressivo até o início da Black Friday 2025 MADU",
   "builders": {
