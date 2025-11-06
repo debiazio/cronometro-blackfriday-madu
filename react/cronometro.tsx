@@ -1,77 +1,60 @@
 import React, { useEffect, useState } from 'react'
+import styles from './styles.css'
 
-const ShelfTimer: React.FC = () => {
-  // 🕒 Data e hora de início (04/11/2025 às 09:45)
-  const startTime = new Date('2025-11-04T09:48:00')
+interface CountdownProps {
+  /** Data final como string (ex: "2025-11-10T00:00:00") */
+  endDate?: string
+  /** Classe do VTEX para personalização */
+  blockClass?: string
+}
 
-  // Duração em milissegundos (10 segundos)
-  const duration = 10 * 1000
-
-  const [timeLeft, setTimeLeft] = useState<number | null>(null)
-  const [isActive, setIsActive] = useState(false)
+const Countdown: React.FC<CountdownProps> = ({
+  endDate = "2025-11-10T00:00:00",
+  blockClass
+}) => {
+  const [time, setTime] = useState({ hours: "00", minutes: "00" })
 
   useEffect(() => {
-    const interval = setInterval(() => {
+    const target = new Date(endDate).getTime()
+
+    const tick = () => {
       const now = new Date().getTime()
-      const start = startTime.getTime()
-      const end = start + duration
+      const diff = target - now
 
-      if (now < start) {
-        // Ainda não começou
-        setIsActive(false)
-        setTimeLeft(start - now)
-      } else if (now >= start && now <= end) {
-        // Está no tempo ativo
-        setIsActive(true)
-        setTimeLeft(end - now)
-      } else {
-        // Passou o tempo
-        setIsActive(false)
-        setTimeLeft(0)
+      if (diff <= 0) {
+        setTime({ hours: "00", minutes: "00" })
+        return
       }
-    }, 1000)
 
-    return () => clearInterval(interval)
-  }, [])
+      const totalHours = Math.floor(diff / (1000 * 60 * 60))
+      const minutes = Math.floor((diff / (1000 * 60)) % 60)
 
-  // Formatar HH:MM:SS
-  const formatTime = (ms: number) => {
-    const totalSeconds = Math.floor(ms / 1000)
-    const hours = String(Math.floor(totalSeconds / 3600)).padStart(2, '0')
-    const minutes = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0')
-    const seconds = String(totalSeconds % 60).padStart(2, '0')
-    return `${hours}:${minutes}:${seconds}`
-  }
-
-  useEffect(() => {
-    // Seleciona a prateleira
-    const shelf = document.querySelector(
-      '.vtex-flex-layout-0-x-flexRow--linha-shelf-timer'
-    ) as HTMLElement | null
-
-    if (shelf) {
-      if (isActive) {
-        shelf.style.display = 'flex'
-      } else {
-        shelf.style.display = 'none'
-      }
+      setTime({
+        hours: String(totalHours).padStart(2, "0"),
+        minutes: String(minutes).padStart(2, "0")
+      })
     }
-  }, [isActive])
+
+    tick()
+    const interval = setInterval(tick, 1000)
+    return () => clearInterval(interval)
+  }, [endDate])
 
   return (
-    <div style={{ textAlign: 'center', margin: '5px 0', color: 'red' }}>
-      {timeLeft !== null && (
-        <div>
-          <h3>
-            {isActive ? 'Oferta ativa! Termina em:' : 'Aguardando início...'}
-          </h3>
-          <p style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'red' }}>
-            {formatTime(timeLeft)}
-          </p>
-        </div>
-      )}
+    <div className={`${styles.countdownContainer} ${blockClass ?? ''}`}>
+      <div className={styles.timeBlock}>
+        <span className={styles.timeNumber}>{time.hours}</span>
+        <span className={styles.timeLabel}>horas</span>
+      </div>
+
+      <span className={styles.separator}>:</span>
+
+      <div className={styles.timeBlock}>
+        <span className={styles.timeNumber}>{time.minutes}</span>
+        <span className={styles.timeLabel}>minutos</span>
+      </div>
     </div>
   )
 }
 
-export default ShelfTimer
+export default Countdown

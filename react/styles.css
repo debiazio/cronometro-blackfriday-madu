@@ -1,0 +1,28 @@
+.countdownContainer {
+  display: flex;
+  align-items: center;
+  color: white;
+  font-family: sans-serif;
+}
+
+.timeBlock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.timeNumber {
+  font-size: 32px;
+  font-weight: bold;
+}
+
+.timeLabel {
+  font-size: 12px;
+  margin-top: 3px;
+}
+
+.separator {
+  margin: 0 8px;
+  font-size: 28px;
+  font-weight: bold;
+}
