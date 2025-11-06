@@ -1,0 +1,23 @@
+{
+  "vendor": "madumfm2",
+  "name": "cronometro",
+  "version": "0.0.0",
+  "title": "cronometro",
+  "description": "App para mostrar um contador regressivo até o início da Black Friday 2025 MADU",
+  "builders": {
+    "react": "3.x",
+    "messages": "1.x",
+    "docs": "0.x",
+    "store": "0.x"
+  },
+  "dependencies": {
+    "vtex.product-context": "0.x",
+    "vtex.css-handles": "0.x",
+    "vtex.search-graphql": "0.x"
+  },
+  "registries": [
+    "smartcheckout"
+  ],
+  "policies": [],
+  "$schema": "https://raw.githubusercontent.com/vtex/node-vtex-api/master/gen/manifest.schema"
+}
